@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
+import { 
+    Container, Typography, Button, Box,
+    Table, TableBody, TableCell, TableHead, TableRow
+ } from "@mui/material"
+
 
 export default function EmployeeList() {
     const [employees, setEmployees] = useState([]);
@@ -8,6 +13,13 @@ export default function EmployeeList() {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
+
+        navigate("/login");
+    }
 
     const fetchEmployees = async () => {
 
@@ -25,68 +37,108 @@ export default function EmployeeList() {
     }, []);
     
     return(
-        <div>
-            <h2>Employee List</h2>
+        <Box>
+            <Container>
+                <Typography variant="h3"
+                    sx={{
+                        fontWeight: "500",
+                        m: "30px auto",
+                        color: "primary.dark"
+                    }}
+                >
+                    Employee List
+                </Typography>
 
-            <button onClick={() => navigate("/employees/new")}>
-                Add New Employee
-            </button>
+                <Box sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    m: "2px auto 20px auto"
+                }}>
+                    <Button variant="contained" onClick={() => navigate("/employees/new")}
+                        sx={{bgcolor: "success.main"}}
+                    >
+                        Add New Employee
+                    </Button>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Profile</th>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Department</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
+                    <Button variant="contained" onClick={() => navigate("/employees/search")}
+                        sx={{}}    
+                    >
+                        Search for Employees
+                    </Button>
 
-                <tbody>
-                    {employees.map((emp) => {
-                        return(
-                            <tr key={emp.employee_id}>
-                                <td>
-                                    {emp.profile_image ? (
-                                        <img
-                                            src={`${emp.profile_image}`}
-                                            alt="Profile"
-                                            width="50"
-                                            height="50"
-                                            style={{ objectFit: "cover", borderRadius: "8px" }}
-                                        />
-                                    ) : (
-                                        <span>No Image Found</span>
-                                    )}
-                                </td>
+                    <Button variant="contained" onClick={handleLogout}
+                        sx={{bgcolor: "error.main"}}
+                    >
+                        Logout
+                    </Button>
+                </Box>
 
-                                <td>{emp.first_name + " " + emp.last_name}</td>
-                                <td>{emp.position}</td>
-                                <td>{emp.department}</td>
+                <Table>
+                    <TableHead>
+                        <TableRow sx={{
+                            "& th": {
+                                fontSize: "15pt"
+                            }
+                        }}>
+                            <TableCell>Profile</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Position</TableCell>
+                            <TableCell>Department</TableCell>
+                            <TableCell>Options</TableCell>
+                        </TableRow>
+                    </TableHead>
 
-                                <td>
-                                    <button
-                                        onClick={() =>
-                                            navigate(`/employees/${emp.employee_id}`)
-                                        }
-                                    >
-                                        View
-                                    </button>
+                    <TableBody>
+                        {employees.map((emp) => {
+                            return(
+                                <TableRow key={emp.employee_id}>
+                                    <TableCell>
+                                        {emp.profile_image ? (
+                                            <Box component="img"
+                                                src={`${emp.profile_image}`}
+                                                alt="Profile"
+                                                sx={{
+                                                    width:75,
+                                                    height:75,
+                                                    objectFit: "cover",
+                                                    borderRadius: 3,
+                                                    border: "1px solid"
+                                                }}
+                                            />
+                                        ) : (
+                                            <span>N / A</span>
+                                        )}
+                                    </TableCell>
 
-                                    <button
-                                        onClick={() =>
-                                            navigate(`/employees/${emp.employee_id}/edit`)
-                                        }
-                                    >
-                                        Update
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-        </div>
+                                    <TableCell>{emp.first_name + " " + emp.last_name}</TableCell>
+                                    <TableCell>{emp.position}</TableCell>
+                                    <TableCell>{emp.department}</TableCell>
+
+                                    <TableCell>
+                                        <Button
+                                            onClick={() =>
+                                                navigate(`/employees/${emp.employee_id}`)
+                                            }
+                                            sx = {{color: "primary.dark", fontWeight: "bold"}}
+                                        >
+                                            View
+                                        </Button>
+
+                                        <Button
+                                            onClick={() =>
+                                                navigate(`/employees/${emp.employee_id}/edit`)
+                                            }
+                                            sx = {{color: "warning.light", fontWeight: "bold"}}
+                                        >
+                                            Update
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>
+                </Table>
+            </Container>
+        </Box>
     )
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate, useParams } from "react-router-dom";
+import { Container, Typography, TextField, Button, Box, FormLabel } from "@mui/material"
 
 export default function EmployeeUpdate() {
     const { eid } = useParams();
@@ -86,55 +87,140 @@ export default function EmployeeUpdate() {
     };
 
     return(
-        <div>
-            <h2>Update Employee</h2>
+        <Box sx={{
+            minHeight: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+        }}>
+            <Container maxWidth="lg" sx={{
+                textAlign: "center",
+                border: 2,
+                pb: "50px",
+                boxShadow: 4,
+                borderRadius: 10
+            }}>
+                <Typography variant="h3"
+                    sx={{
+                        fontWeight: "500",
+                        m: "30px auto",
+                        color: "primary.dark"
+                    }}
+                >
+                    Update Employee
+                </Typography>
 
-            {existingImage && (
-                <div>
-                    <p>Current Profile Image:</p>
-                    <img
-                        src={existingImage}
-                        alt="Profile"
-                        width="150"
-                        style={{ borderRadius: "8px" }}
-                    />
-                </div>
-            )}
-
-            <form onSubmit={handleSubmit}>
-                {Object.keys(form).map((key) => {
-                    if (key === "profile_image") return null;
-
-                    const label = key
-                        .split("_")
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(" ");
-                    
-                    return(
-                       <div key={key}>
-                        <label>{label}: </label>
-                        <input 
-                            name={key}
-                            value={form[key]}
-                            onChange={handleChange}
-                            placeholder=""
-                            required
+                {existingImage && (
+                    <Box>
+                        <Typography>Current Profile Image:</Typography>
+                        <br />
+                        <Box component="img" 
+                            src={existingImage}
+                            alt="Profile"
+                            sx={{
+                                width: 150,
+                                objectFit: "cover",
+                                borderRadius: 3,
+                                border: "2px solid",
+                                mb: "20px"
+                            }}
                         />
-                        </div> 
-                    );
-                })}
+                    </Box>
+                )}
 
-                <div>
-                    <label>Update Profile Image:</label>
-                    <input 
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                    />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    {Object.keys(form).map((key) => {
+                        if (key === "profile_image") return null;
 
-                <button type="submit">Update Employee</button>
-            </form>
-        </div>
+                        const label = key
+                            .split("_")
+                            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                            .join(" ");
+                        
+                        return(
+                            <Box key={key}
+                                sx={{
+                                    display: "grid",
+                                    gridTemplateColumns: "150px 1fr",
+                                    alignItems: "center",
+                                    columnGap: 2,
+                                    width: "50%",
+                                    m: "auto auto 10px auto"
+                                }}
+                            >
+                                <FormLabel sx={{fontWeight: "bold"}}>{label}: </FormLabel>
+                                <TextField 
+                                    name={key}
+                                    value={form[key]}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </Box>
+                        );
+                    })}
+
+                    <Box
+                        sx={{
+                            display: "grid",
+                            gridTemplateColumns: "150px 1fr",
+                            alignItems: "center",
+                            columnGap: 2,
+                            width: "50%",
+                            m: "auto auto 20px auto"
+                        }}
+                    >
+                        <FormLabel sx={{fontWeight: "bold"}}>Update Image: </FormLabel>
+                        <Button
+                            variant="contained"
+                            component="label"
+                            sx={{mt: 1}}
+                        >
+                            Upload File
+                            <input 
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                hidden
+                            />
+                        </Button>
+                    </Box>
+
+                    {error && <Typography style={{color: "red"}}>{error}</Typography>}
+
+                    <Button variant="outlined" type="submit"
+                        sx={{
+                            fontWeight: "bold",
+                            borderWidth: "2px",
+                            borderColor: "primary.dark",
+                            "&:hover": {
+                                backgroundColor: "primary.light",
+                                color: "white",
+                                boxShadow: 4
+                            }
+                        }}
+                    >
+                        Update Employee
+                    </Button>
+                    <Button onClick={() => navigate("/employees")} variant="outlined"
+                        sx={{
+                            ml: "20px",
+                            color: "error.dark",
+                            fontWeight: "bold",
+                            borderWidth: "2px",
+                            borderColor: "error.dark",
+                            "&:hover": {
+                                backgroundColor: "error.light",
+                                color: "white",
+                                boxShadow: 4
+                            }
+                        }} 
+                    >
+                        Cancel
+                    </Button>
+                </form>
+            </Container>
+        </Box>
+
     )
 }

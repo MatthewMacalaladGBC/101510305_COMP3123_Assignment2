@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate, useParams } from "react-router-dom";
+import { Container, Typography, TextField, Button, Box, Stack, FormLabel } from "@mui/material"
 
 export default function EmployeeDetails() {
     const { eid } = useParams();
@@ -36,38 +37,77 @@ export default function EmployeeDetails() {
     };
 
     if (!employee) {
-        return <p>Loading employee...</p>;
+        return <Typography>Loading employee...</Typography>;
     }
 
     return(
-        <div>
-            <h2>Employee Details</h2>
+        <Box sx={{
+            minHeight: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+        }}>
+            <Container maxWidth="sm" sx={{
+                textAlign: "center",
+                border: 2,
+                paddingBottom: "20px",
+                boxShadow: 4,
+                borderRadius: 10,
+                borderColor: "primary.dark"
+            }}>
+                <Typography variant="h3"
+                    sx={{
+                        fontWeight: "500",
+                        m: "30px auto",
+                        color: "primary.dark"
+                    }}
+                >
+                    Employee Details
+                </Typography>
 
-            {employee.profile_image && (
-                <img 
-                    src={employee.profile_image}
-                    alt={employee.profile_image}// "Profile"
-                    width="200"
-                    style={{ borderRadius: "10px", marginBottom: "20px" }}
-                />
-            )}
+                {employee.profile_image && (
+                    <Box component="img" 
+                        src={employee.profile_image}
+                        alt="Profile"
+                        sx={{
+                            width: 150,
+                            objectFit: "cover",
+                            borderRadius: 3,
+                            border: "2px solid",
+                            mb: "20px"
+                        }}
+                    />
+                )}
 
-            <p><strong>Name:</strong> {employee.first_name} {employee.last_name}</p>
-            <p><strong>Email:</strong> {employee.email}</p>
-            <p><strong>Position:</strong> {employee.position}</p>
-            <p><strong>Salary:</strong> ${employee.salary}</p>
-            <p><strong>Date of Joining:</strong> {employee.date_of_joining?.substring(0, 10)}</p>
-            <p><strong>Department:</strong> {employee.department}</p>
-
-            <button onClick={() => navigate(`/employees/${eid}/edit`)}>
-                Edit Employee
-            </button>
-            <button onClick={handleDelete}>
-                Delete Employee
-            </button>
-            <button onClick={() => navigate("/employees")}>
-                Back to List
-            </button>
-        </div>
+                <Box sx={{
+                    display: "grid",
+                    rowGap: 2,
+                    mb: "20px"
+                }}>
+                    <Typography><strong>Name:</strong> {employee.first_name} {employee.last_name}</Typography>
+                    <Typography><strong>Email:</strong> {employee.email}</Typography>
+                    <Typography><strong>Position:</strong> {employee.position}</Typography>
+                    <Typography><strong>Salary:</strong> ${employee.salary}</Typography>
+                    <Typography><strong>Date of Joining:</strong> {employee.date_of_joining?.substring(0, 10)}</Typography>
+                    <Typography><strong>Department:</strong> {employee.department}</Typography>
+                </Box>
+                
+                <Box sx={{
+                    display: "flex",
+                    justifyContent: "space-between"
+                }}>
+                    <Button onClick={() => navigate(`/employees/${eid}/edit`)} sx={{color:"warning.main"}}>
+                        Update Employee
+                    </Button>
+                    <Button onClick={handleDelete} sx={{color:"error.main"}}>
+                        Delete Employee
+                    </Button>
+                    <Button onClick={() => navigate("/employees")}>
+                        Back to List
+                    </Button>
+                </Box>
+                
+            </Container>
+        </Box>
     )
 }

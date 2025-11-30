@@ -7,6 +7,7 @@ import Signup from './screens/SignupScreen';
 import EmployeeCreate from './screens/EmployeeCreateScreen';
 import EmployeeDetails from './screens/EmployeeDetailsScreen';
 import EmployeeList from './screens/EmployeeListScreen';
+import EmployeeSearch from './screens/EmployeeSearchScreen';
 import EmployeeUpdate from './screens/EmployeeUpdateScreen';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/employees/new" element={<EmployeeCreate />} />
           <Route path="/employees/:eid" element={<EmployeeDetails />} />
           <Route path="/employees/:eid/edit" element={<EmployeeUpdate />} />
+          <Route path="/employees/search" element={<EmployeeSearch />} />
         </Route>
 
         {/* Default route */}
